@@ -1,0 +1,204 @@
+Project 5 Rubric
+Criteria	Ratings	Pts
+Files Correctly Submitted
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Program Assembles, Links, & Executes
+3 pts
+Full Marks
+0 pts
+No Marks
+3 / 3 pts
+Documentation - Identification Block - Header
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Documentation - Identification Block - Program Description
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Documentation - Procedure Headers
+2 pts
+Full Marks
+1 pts
+Headers without Conditions
+Descriptive headers but lacking pre- and post-conditions and 'registers changed'
+0 pts
+No Marks
+Headers not descriptive, no pre-post conditions and no 'registers changed'
+Comments
+Please see the 271 style guide for how to do procedure headers.
+0 / 2 pts
+Documentation - Section and In-line Comments
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Completeness - Displays Title & Programmer Name, and Program Description
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Completeness - Displays Unsorted randArray
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Completeness - Displays Median with descriptive title.
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Completeness - Displays Sorted randArray
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Completeness - Displays 'Counts' Array
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Completeness - Arrays are displayed 20 values per line, with once space between values.
+2 pts
+Full Marks
+0 pts
+No Marks
+2 / 2 pts
+Completeness - Arrays are printed with a descriptive title
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Correctness - Array declarations are sized based on the constant values ARRAYSIZE, LO, and HI
+2 pts
+Full Marks
+0 pts
+No Marks
+2 / 2 pts
+Correctness - Generates random numbers correctly in range specified by passed values.
+2 pts
+Full Marks
+0 pts
+No Marks
+2 / 2 pts
+Correctness - Stores random numbers consecutively in randArray
+2 pts
+Full Marks
+0 pts
+No Marks
+2 / 2 pts
+Correctness - randArray is sorted in ascending order
+5 pts
+Perfect Sort
+0 pts
+Imperfect Sort
+5 / 5 pts
+Correctness - Median is calculated and rounded properly
+2 pts
+Median Correct
+0 pts
+Median Incorrect
+2 / 2 pts
+Correctness - 'counts' array accurately lists the number of instances of each value in 'randArray'
+4 pts
+Full Marks
+2 pts
+Sometimes off by one
+Counts may be off by 1 in special cases (such as when there are no instances of a number)
+0 pts
+No Marks
+4 / 4 pts
+Requirements - Modular Design
+8 pts
+Full Marks
+6 pts
+All Except Median
+All procedures exist and used except displayMedian. Median calculation done in main or grouped in other procedure.
+0 pts
+No Marks
+8 / 8 pts
+Requirements - Parameter Passing
+5 pts
+Full Marks
+1 pts
+All Except Strings/Arrays
+Value-parameters and return parameters passed on stack but array/string offsets are not.
+0 pts
+No Marks
+Comments
+There are a lot of variables missing from the stack throughout your program i.e. HI, LO, spaceChar, CommaSpace, goodbye, etc.
+1 / 5 pts
+Requirements - displayList used for all array printouts
+0 pts
+Full Marks
+0 pts
+No Marks
+Comments
+CountList has it's own printing functionality.
+-5 / 0 pts
+Requirements - Limits as CONSTANTS
+0 pts
+Full Marks
+0 pts
+No Marks
+0 / 0 pts
+Requirements - No global references outside of main
+0 pts
+Full Marks
+0 pts
+No Marks
+Comments
+The following procedures access directly globals incorrectly: printCommaSpace, farewell, countList, exchangeElements, printNewLine, displayList, getRandomNumber, and introduction. That's 7 procedures x -5 points each = -35 points. I'll cut you some slack and only deduct -20.
+-15 / 0 pts
+Requirements - Correct Array Addressing Modes
+0 pts
+Full Marks
+0 pts
+No Marks
+0 / 0 pts
+Coding Style - Uses appropriately named identifiers
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Coding Style - Readability
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Output Style - Readability
+1 pts
+Full Marks
+0 pts
+No Marks
+1 / 1 pts
+Extra Credit
+0 pts
+Full Marks
+0 pts
+No Marks
+-- / 0 pts
+Late Penalty
+0 pts
+Full Marks
+0 pts
+No Marks
+-- / 0 pts
+Total Points: 24
