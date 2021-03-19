@@ -1,0 +1,366 @@
+TITLE Generating, Sorting, and Counting Random Integers. Project 5
+
+; Author: Ashley Johnson
+; Last Modified: 2/20/2021
+; OSU email address: johnsas8@oregonstate.edu
+; Course number/section:   CS271 Section 400
+; Project Number:   5              Due Date:2/28/2021
+; Description: This file generates  random integers from [10,29], sorts and prints the list in 
+; ascending order, prints the median, then prints the counts of each number starting with 10. 
+
+INCLUDE Irvine32.inc
+; initialize constant range limits
+   HI = 29
+   LO = 10
+   ARRAYSIZE = 180
+   NUMLINES = 20
+.data
+	
+   progTitle BYTE   "Generating, Sorting, and Counting Random Integers! Program #5  Programmed by: Ashley Johnson ", 0 
+   intro1	BYTE	"This program generates ",0
+   intro1continue BYTE " random numbers in the range [",0
+   dotDot BYTE "...",0
+   intro2	BYTE   "], displays the original list, sorts the list, displays the median value of the list, displays the list sorted in ascending order, then displays the number of instances of each generated value, starting with the number of ",0
+   unsortedMessage	BYTE	"Your unsorted random numbers: ", 0
+   intro3 BYTE "s.",0
+   medianMessage BYTE    "The median value of the array: ", 0
+   sortedMessage		BYTE	"Your sorted random numbers: ", 0
+   countMessage	BYTE	"Your list of instances of each generated number, starting with the number of ", 0
+   countMessageCont BYTE	"s:",0
+   randomNumber DWORD ?
+   exchange1 DWORD	?
+   spaceChar	BYTE	" ", 0
+   exchange2	DWORD	?
+   median DWORD ?
+   randArray DWORD ARRAYSIZE DUP(?)
+   sortedArray	DWORD ARRAYSIZE DUP(?)
+   ranVal DWORD ?
+   counts DWORD	ARRAYSIZE DUP(?)
+   numFound DWORD 0
+   typeArray	DWORD	TYPE randArray
+   count	DWORD	LENGTHOF randArray
+   numBytes	DWORD	SIZEOF randArray
+   numEntered	SDWORD	?	; number user enters
+   goodbye  BYTE   "Goodbye, and thanks for using this program! " ,0
+   commaSpace BYTE " ",0
+
+.code
+main PROC
+	call randomize
+	push OFFSET intro3
+	push OFFSET intro2
+	push OFFSET dotDot
+	push OFFSET intro1continue
+	push OFFSET intro1
+	push OFFSET progTitle
+	call introduction
+
+	;call fillArray
+	push OFFSET randArray
+	push lengthof randArray
+	call fillArray
+
+
+	push OFFSET randArray
+	push lengthof randArray
+	push OFFSET unsortedMessage
+	call displayList
+
+	push OFFSET randArray
+	push lengthof randArray
+	push OFFSET counts
+	call sortList
+
+
+	push OFFSET counts
+	push OFFSET sortedArray
+	push sizeof counts
+	call exchangeElements
+
+	push lengthof sortedArray
+	push OFFSET sortedArray
+	push OFFSET medianMessage
+	call displayMedian
+
+	push OFFSET countMessageCont
+	push OFFSET countMessage
+	push OFFSET counts
+	call countList
+
+	push OFFSET sortedArray
+	push lengthof sortedArray
+	push OFFSET sortedMessage
+	call displayList
+	call farewell
+	Invoke exitProcess,0	;exit to operating system
+main ENDP
+
+introduction PROC
+call randomize
+	push ebp
+	mov ebp, esp
+	mov edx, [ebp+8]; program title
+	call WriteString
+	call crlf 
+	
+	mov edx, [ebp+12]; intro1
+	call WriteString
+
+	mov ebx, ARRAYSIZE ; printing arraysize
+	mov DWORD PTR eax, ebx
+	call WriteDec
+	mov edx, [ebp+16] ; intro1continue
+	call WriteString
+	mov ebx, LO ; printing LO
+	mov DWORD PTR eax, ebx
+	call WriteDec
+	mov edx, [ebp+20]; prints ...
+	call WriteString
+	mov ebx, HI; printing HI
+	mov DWORD PTR eax, ebx
+	call WriteDec
+	mov edx, [ebp+24]; intro2
+	call WriteString
+		mov ebx, LO ; printing LO
+	mov DWORD PTR eax, ebx
+	call WriteDec
+
+	mov edx, [ebp+28]; prints intro3
+	mov eax, [edx]
+	call WriteString
+	call crlf
+	call crlf
+	call crlf
+	pop ebp
+	RET 24
+introduction ENDP
+
+getRandomNumber PROC
+	mov ebx, LO
+	_getRandom:
+	mov eax, HI
+	call RandomRange
+	cmp eax, ebx
+	jl _getRandom
+	RET
+getRandomNumber ENDP
+
+fillArray PROC
+	push ebp
+	mov ebp, esp
+	mov ecx, [ebp+8]
+	mov esi, [ebp+12]
+	mov edx, 0
+	loopNum:
+	call getRandomNumber
+	mov randArray[edx], eax
+	add edx,4
+	loop loopNum
+	pop ebp
+RET 4
+fillArray ENDP
+; fill randArray with random integers in range [10,29]
+
+mov edx, OFFSET unsortedMessage
+call WriteString
+call crlf
+displayList PROC
+	push ebp
+	mov ebp, esp
+	mov edx, [ebp+8]; string address
+	mov ecx, [ebp+12]; sizeof array
+	mov ebx, [ebp+16]; adress of array
+	mov esi, 0 ; counter
+
+	mov eax, [edx]
+	call WriteString
+	call crlf
+
+	printLoop:
+	;mov eax, OFFSET randomNumber
+	mov eax, [ebx]
+	add ebx,4
+	call WriteDec
+	mov edx, OFFSET spaceChar
+	call WriteString
+	inc esi;compare to counter to print new line
+	push eax
+	push ebx
+	push esi
+	call printNewLine
+	pop ebx
+	pop eax
+	loop printLoop
+	call crlf
+	call crlf
+	pop ebp
+
+	RET 12
+displayList ENDP
+
+printNewLine PROC
+	push ebp
+	mov ebp,esp
+	mov eax, [ebp+8]
+	mov ebx, NUMLINES
+	cdq
+	idiv ebx
+	cmp edx, 0
+	jg _done
+	call crlf
+	_done:
+	pop ebp
+	RET 4
+printNewLine ENDP
+
+exchangeElements PROC
+	push ebp
+	mov ebp, esp
+	mov esi, [ebp+16]; funkyArray
+	mov ebx, [ebp+12]; sortedArray
+	mov ecx, HI-LO; sizeof counts
+	mov edx, LO ; index of old array
+	add esi, LO*4; address in funky array
+
+	
+	convertLoop:
+	    mov edi, edx; edi contains number to be added to new array
+	    mov eax, [esi]; eax contains how many of above numbers to be added
+	    _keepAdding:
+            cmp eax, 0
+            je _done
+			mov DWORD PTR[ebx], edi
+            dec eax
+	        add ebx, 4
+	        jg _keepAdding
+		_done:
+	    add esi,4
+	    inc edx
+	loop convertLoop
+	pop ebp
+	ret 12
+exchangeElements ENDP
+
+ 
+;sorts numbers in array in ascending order
+sortList PROC
+	push ebp
+	mov ebp, esp
+	mov esi, [ebp+16]; esi contains old array
+	mov ecx, [ebp+12]; exc contains size of old array
+	mov ebx, [ebp+8]; eax containes sorted array
+	_printArray:
+	mov eax, [esi]
+	mov edx, [ebx+eax*4]
+	inc edx
+	mov [ebx+eax*4], edx
+	add esi, 4
+	loop _printArray
+	pop ebp
+	RET
+sortList ENDP
+
+;calculates and displays the median of array
+displayMedian PROC
+	push ebp
+	mov ebp,esp
+	mov esi, [ebp+8]	;Message
+	mov edi, [ebp+12]	;counts
+	mov eax, [ebp+16] ; sizeof counts
+
+	;print message
+	mov edx, esi
+	call WriteString
+	;get middle number
+	cdq
+	mov ebx, 2
+	idiv ebx ; eax holds middle
+	; figure out odd or even
+	;edx contains remainder
+	
+	imul eax,4
+	add edi, eax
+	cmp edx, 0
+	jg _oddNumber
+	push [edi]
+	sub edi,4
+	mov eax, [edi]
+	pop ecx
+	add eax, ecx
+	idiv ebx
+	call WriteDec
+	jmp _done
+
+	;print odd number
+	_oddNumber:
+	mov eax, [edi]
+	call WriteDec
+	_done:
+	call crlf
+	call crlf
+
+	pop ebp
+	RET 12
+
+displayMedian ENDP
+
+;displays the count of each number in array
+countList	PROC
+	push ebp
+	mov ebp, esp
+	mov esi, [ebp+8] ;moves counts into esi
+	mov edx, [ebp+12]; prints countMessage
+	mov eax, [edx]
+	call WriteString
+
+	mov ebx, LO ; printing LO
+	mov DWORD PTR eax, ebx
+	call WriteDec
+
+	mov edx, [ebp+16]; prints countMessageCont
+	mov eax, [edx]
+	call WriteString; prints countMessagecont
+	call crlf
+	mov edx, LO*4
+	add esi, edx
+	mov ecx, HI-LO
+	mov edi, 0; counter
+	countLoop:
+		mov eax, [esi]
+		call WriteDec
+		push edx
+		call PrintCommaSpace
+		pop edx
+		add edx,1
+		add esi, 4
+		inc edi ; compare to counter to print new line
+		push eax
+		push ebx
+		push edi
+		call printNewLine
+		pop ebx
+		pop eax
+	loop countLoop
+	call crlf
+	call crlf
+	pop ebp
+	RET 12
+
+countList	ENDP
+
+;print goodbye message
+farewell PROC
+	call CrLf
+	call crlf
+	mov edx, OFFSET goodbye
+	call WriteString
+	RET
+farewell ENDP
+
+printCommaSpace PROC
+	mov edx, OFFSET CommaSpace
+	call WriteString
+	RET
+printCommaSpace ENDP
+
+END Main
